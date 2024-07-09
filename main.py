@@ -10,11 +10,12 @@ init(autoreset=True)
 # Load environment variables from .env file
 load_dotenv()
 
-# Get the OpenAI API key from environment variables
+# Get the OpenAI API key and base URL from environment variables
 api_key = os.getenv('OPENAI_API_KEY')
+base_url = os.getenv('BASE_URL', 'https://api.openai.com')
 
-# Initialize the OpenAI client
-client = OpenAI(api_key=api_key)
+# Initialize the OpenAI client with the custom base URL if provided
+client = OpenAI(api_key=api_key, base_url=base_url)
 
 
 def get_openai_response(prompt):
@@ -74,6 +75,7 @@ def select_game_mode():
     print(Fore.CYAN + "Select a game mode:")
     print("1: Play with generated options")
     print("2: Play by typing your own actions")
+    print("3: Enter a custom prompt")
 
     choice = input(Fore.YELLOW + "Enter the number corresponding to your choice: ")
     return choice
@@ -102,14 +104,27 @@ def main():
     # Select the game mode
     game_mode = select_game_mode()
 
-    # Select and display the initial prompt based on the chosen theme
-    initial_prompt = select_theme()
-    print(Fore.GREEN + initial_prompt)
-    print(divider)
-    input(Fore.CYAN + "Press Enter to continue...")
+    if game_mode == '3':
+        custom_prompt = input(Fore.YELLOW + "Enter your custom prompt: ")
+        print(Fore.MAGENTA + "-" * 50)
+        print(Fore.GREEN + custom_prompt)
+        print(divider)
+        input(Fore.CYAN + "Press Enter to continue...")
 
-    # Maintain context of the game
-    context = initial_prompt
+        # Maintain context of the game
+        context = custom_prompt
+
+        # Ask the player how they want to play the custom prompt
+        game_mode = select_game_mode()
+    else:
+        # Select and display the initial prompt based on the chosen theme
+        initial_prompt = select_theme()
+        print(Fore.GREEN + initial_prompt)
+        print(divider)
+        input(Fore.CYAN + "Press Enter to continue...")
+
+        # Maintain context of the game
+        context = initial_prompt
 
     while True:
         if game_mode == '1':

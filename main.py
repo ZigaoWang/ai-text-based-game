@@ -21,7 +21,7 @@ def get_openai_response(prompt):
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=150,
+        max_tokens=100,
         stop=None,
         temperature=0.7,
     )
@@ -53,7 +53,7 @@ def select_theme():
         custom_theme = input(Fore.YELLOW + "Enter a custom theme description: ")
         print(Fore.MAGENTA + "-" * 50)
         print(Fore.CYAN + "Generating custom theme...")
-        intro_prompt = f"This is a text based game, and you need to write an introduction for the following theme: {custom_theme}. Make it short, 30 words max for each response."
+        intro_prompt = f"This is a text-based game, and you need to write a short introduction for the following theme: {custom_theme}. Make it short, 30 words max."
         intro = get_openai_response(intro_prompt)
         print(Fore.GREEN + f"\n{intro}\n")
         input(Fore.CYAN + "Press Enter to continue...")
@@ -112,7 +112,8 @@ def main():
 
         # Get the response from OpenAI
         print(Fore.CYAN + "Generating description...")
-        response = get_openai_response(context)
+        response_prompt = f"{context} Keep the description short, 30 words max."
+        response = get_openai_response(response_prompt)
 
         # Append the response to the context for further context
         context += f" {response}"

@@ -70,11 +70,23 @@ def generate_options(prompt):
     return [option.strip() for option in options if option.strip()]
 
 
+def select_game_mode():
+    print(Fore.CYAN + "Select a game mode:")
+    print("1: Play with generated options")
+    print("2: Play by typing your own actions")
+
+    choice = input(Fore.YELLOW + "Enter the number corresponding to your choice: ")
+    return choice
+
+
 def main():
     print(Fore.MAGENTA + "Welcome to the OpenAI Text Adventure Game! 🌟")
     print(Fore.MAGENTA + "You can type your actions to interact with the game world.")
     print(Fore.MAGENTA + "Type 'quit' to exit the game.")
     print(Fore.MAGENTA + "-" * 50)
+
+    # Select the game mode
+    game_mode = select_game_mode()
 
     # Select and display the initial prompt based on the chosen theme
     initial_prompt = select_theme()
@@ -86,33 +98,40 @@ def main():
     context = initial_prompt
 
     while True:
-        # Generate options for the user
-        options = generate_options(context)
+        if game_mode == '1':
+            # Generate options for the player
+            options = generate_options(context)
+            for i, option in enumerate(options, 1):
+                print(Fore.YELLOW + f"{i}. {option}")
 
-        print(Fore.MAGENTA + "-" * 50)
-        print(Fore.CYAN + "What do you want to do?")
-        for i, option in enumerate(options[:4], 1):
-            print(Fore.YELLOW + f"{i}. {option}")
-        print(Fore.YELLOW + "5. 📝 Custom")
-        print(Fore.MAGENTA + "-" * 50)
+            # User input for the next action
+            user_choice = input(Fore.YELLOW + "Select an action by entering the number: ")
 
-        user_choice = input(Fore.YELLOW + "Enter the number corresponding to your choice: ")
+            if user_choice.lower() == 'quit':
+                print(Fore.MAGENTA + "Thanks for playing! See you next time! 🎮")
+                break
 
-        if user_choice.lower() == 'quit':
-            print(Fore.MAGENTA + "Thanks for playing! See you next time! 🎮")
-            break
+            # Validate user choice
+            try:
+                user_action = options[int(user_choice) - 1]
+            except (IndexError, ValueError):
+                print(Fore.RED + "Invalid choice. Please select a valid option.")
+                continue
 
-        if user_choice == '5':
-            user_input = input(Fore.YELLOW + "Enter your custom action: ")
         else:
-            user_input = options[int(user_choice) - 1]
+            # User input for the next action
+            user_action = input(Fore.YELLOW + "Your action: ")
+
+            if user_action.lower() == 'quit':
+                print(Fore.MAGENTA + "Thanks for playing! See you next time! 🎮")
+                break
 
         # Append the user's action to the context
-        context += f"\nYou: {user_input}\nGame:"
+        context += f"\nYou: {user_action}\nGame:"
 
         # Get the response from OpenAI
         print(Fore.CYAN + "Generating description...")
-        response_prompt = f"{context} Keep the description short, 30 words max."
+        response_prompt = f"{context} Keep the description short, 30 words max. Ask the player what they want to do next."
         response = get_openai_response(response_prompt)
 
         # Append the response to the context for further context
@@ -122,6 +141,7 @@ def main():
         print(Fore.GREEN, end='')
         print(response)
         print(Fore.MAGENTA + "-" * 50)
+
         input(Fore.CYAN + "Press Enter to continue...")
 
 

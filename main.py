@@ -1,6 +1,10 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+from colorama import init, Fore, Style
+
+# Initialize colorama
+init(autoreset=True)
 
 # Load environment variables from .env file
 load_dotenv()
@@ -38,59 +42,59 @@ def select_theme():
         '11': "Custom Theme"
     }
 
-    print("Select a theme for your adventure:")
+    print(Fore.CYAN + "Select a theme for your adventure:")
     for key, description in themes.items():
         print(f"{key}: {description.split(':')[0]}")
 
-    choice = input("Enter the number corresponding to your choice: ")
+    choice = input(Fore.YELLOW + "Enter the number corresponding to your choice: ")
 
     if choice == '11':
-        custom_theme = input("Enter a custom theme description: ")
+        custom_theme = input(Fore.YELLOW + "Enter a custom theme description: ")
         intro_prompt = f"Create an introduction for the following theme: {custom_theme}"
         intro = get_openai_response(intro_prompt)
-        print(f"\n{intro}\n")
+        print(Fore.GREEN + f"\n{intro}\n")
         return intro
 
     return themes.get(choice, themes['1'])
 
 
 def generate_options(prompt):
-    options_prompt = f"Based on the following scenario, provide four different short actions the player can take: {prompt}. Make sure the 4 actions are short, 10 words max, and dont use numbers. Add emojis at the start."
+    options_prompt = f"Based on the following scenario, provide four different short actions the player can take: {prompt}. Make sure the 4 actions are short, 10 words max, and don't use numbers. Add emojis at the start."
     response = get_openai_response(options_prompt)
     options = response.split("\n")
     return [option.strip() for option in options if option.strip()]
 
 
 def main():
-    print("Welcome to the OpenAI Text Adventure Game! 🌟")
-    print("You can type your actions to interact with the game world.")
-    print("Type 'quit' to exit the game.\n")
+    print(Fore.MAGENTA + "Welcome to the OpenAI Text Adventure Game! 🌟")
+    print(Fore.MAGENTA + "You can type your actions to interact with the game world.")
+    print(Fore.MAGENTA + "Type 'quit' to exit the game.\n")
 
     # Select and display the initial prompt based on the chosen theme
     initial_prompt = select_theme()
-    print(initial_prompt)
+    print(Fore.GREEN + initial_prompt)
 
     # Maintain context of the game
     context = initial_prompt
 
     while True:
-        print("\nGenerating options...")
+        print(Fore.CYAN + "\nGenerating options...")
         # Generate options for the user
         options = generate_options(context)
 
-        print("\nWhat do you want to do?")
+        print(Fore.CYAN + "\nWhat do you want to do?")
         for i, option in enumerate(options[:4], 1):
-            print(f"{i}. {option}")
-        print("5. 📝 Custom")
+            print(Fore.YELLOW + f"{i}. {option}")
+        print(Fore.YELLOW + "5. 📝 Custom")
 
-        user_choice = input("Enter the number corresponding to your choice: ")
+        user_choice = input(Fore.YELLOW + "Enter the number corresponding to your choice: ")
 
         if user_choice.lower() == 'quit':
-            print("Thanks for playing! 🎮")
+            print(Fore.MAGENTA + "Thanks for playing! 🎮")
             break
 
         if user_choice == '5':
-            user_input = input("Enter your custom action: ")
+            user_input = input(Fore.YELLOW + "Enter your custom action: ")
         else:
             user_input = options[int(user_choice) - 1]
 
@@ -104,7 +108,7 @@ def main():
         context += f" {response}"
 
         # Print the response for the user to see
-        print(response)
+        print(Fore.GREEN + response)
 
 
 if __name__ == "__main__":

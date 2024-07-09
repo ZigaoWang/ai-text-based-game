@@ -80,10 +80,24 @@ def select_game_mode():
 
 
 def main():
-    print(Fore.MAGENTA + "Welcome to the OpenAI Text Adventure Game! 🌟")
+    divider = Fore.MAGENTA + "-" * 50
+
+    logo = r"""
+   ___   ____  ______        __      ___                  __  _____              
+  / _ | /  _/ /_  __/____ __/ /_____/ _ )___ ____ ___ ___/ / / ___/__ ___ _  ___ 
+ / __ |_/ /    / / / -_) \ / __/___/ _  / _ `(_-</ -_) _  / / (_ / _ `/  ' \/ -_)
+/_/ |_/___/   /_/  \__/_\_\\__/   /____/\_,_/___/\__/\_,_/  \___/\_,_/_/_/_/\__/
+        """
+    print("--------------------------------------------------")
+    print(logo)
+    print("AI Text-Based Game")
+    print("Made by 💜 from Zigao Wang.")
+    print("This project is licensed under MIT License.")
+    print("GitHub Repo: https://github.com/ZigaoWang/ai-text-based-game/")
+    print("--------------------------------------------------")
     print(Fore.MAGENTA + "You can type your actions to interact with the game world.")
     print(Fore.MAGENTA + "Type 'quit' to exit the game.")
-    print(Fore.MAGENTA + "-" * 50)
+    print(divider)
 
     # Select the game mode
     game_mode = select_game_mode()
@@ -91,7 +105,7 @@ def main():
     # Select and display the initial prompt based on the chosen theme
     initial_prompt = select_theme()
     print(Fore.GREEN + initial_prompt)
-    print(Fore.MAGENTA + "-" * 50)
+    print(divider)
     input(Fore.CYAN + "Press Enter to continue...")
 
     # Maintain context of the game
@@ -137,10 +151,10 @@ def main():
         # Append the response to the context for further context
         context += f" {response}"
 
-        print(Fore.MAGENTA + "-" * 50)
+        print(divider)
         print(Fore.GREEN, end='')
         print(response)
-        print(Fore.MAGENTA + "-" * 50)
+        print(divider)
 
         input(Fore.CYAN + "Press Enter to continue...")
 

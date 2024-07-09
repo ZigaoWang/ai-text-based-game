@@ -1,8 +1,3 @@
-Sure! I'll adjust the `README.md` to mention support for OpenAI models in general rather than just GPT-3.5, and I'll also provide a sample `requirements.txt` file.
-
-### Updated `README.md`
-
-```markdown
 # AI Text-Based Game
 
 ![Logo](path_to_logo_image)

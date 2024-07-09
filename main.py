@@ -10,12 +10,11 @@ init(autoreset=True)
 # Load environment variables from .env file
 load_dotenv()
 
-# Get the OpenAI API key and base URL from environment variables
+# Get the OpenAI API key from environment variables
 api_key = os.getenv('OPENAI_API_KEY')
-base_url = os.getenv('BASE_URL', 'https://api.openai.com')
 
-# Initialize the OpenAI client with the custom base URL if provided
-client = OpenAI(api_key=api_key, base_url=base_url)
+# Initialize the OpenAI client
+client = OpenAI(api_key=api_key)
 
 
 def get_openai_response(prompt):

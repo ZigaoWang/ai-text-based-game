@@ -1,4 +1,5 @@
 import os
+import time
 from dotenv import load_dotenv
 from openai import OpenAI
 from colorama import init, Fore, Style
@@ -50,9 +51,12 @@ def select_theme():
 
     if choice == '11':
         custom_theme = input(Fore.YELLOW + "Enter a custom theme description: ")
-        intro_prompt = f"Create an introduction for the following theme: {custom_theme}"
+        print(Fore.MAGENTA + "-" * 50)
+        print(Fore.CYAN + "Generating custom theme...")
+        intro_prompt = f"This is a text based game, and you need to write an introduction for the following theme: {custom_theme}. Make it short, 30 words max for each response."
         intro = get_openai_response(intro_prompt)
         print(Fore.GREEN + f"\n{intro}\n")
+        input(Fore.CYAN + "Press Enter to continue...")
         return intro
 
     return themes.get(choice, themes['1'])
@@ -60,6 +64,7 @@ def select_theme():
 
 def generate_options(prompt):
     options_prompt = f"Based on the following scenario, provide four different short actions the player can take: {prompt}. Make sure the 4 actions are short, 10 words max, and don't use numbers. Add emojis at the start."
+    print(Fore.CYAN + "Generating options...")
     response = get_openai_response(options_prompt)
     options = response.split("\n")
     return [option.strip() for option in options if option.strip()]
@@ -68,29 +73,33 @@ def generate_options(prompt):
 def main():
     print(Fore.MAGENTA + "Welcome to the OpenAI Text Adventure Game! 🌟")
     print(Fore.MAGENTA + "You can type your actions to interact with the game world.")
-    print(Fore.MAGENTA + "Type 'quit' to exit the game.\n")
+    print(Fore.MAGENTA + "Type 'quit' to exit the game.")
+    print(Fore.MAGENTA + "-" * 50)
 
     # Select and display the initial prompt based on the chosen theme
     initial_prompt = select_theme()
     print(Fore.GREEN + initial_prompt)
+    print(Fore.MAGENTA + "-" * 50)
+    input(Fore.CYAN + "Press Enter to continue...")
 
     # Maintain context of the game
     context = initial_prompt
 
     while True:
-        print(Fore.CYAN + "\nGenerating options...")
         # Generate options for the user
         options = generate_options(context)
 
-        print(Fore.CYAN + "\nWhat do you want to do?")
+        print(Fore.MAGENTA + "-" * 50)
+        print(Fore.CYAN + "What do you want to do?")
         for i, option in enumerate(options[:4], 1):
             print(Fore.YELLOW + f"{i}. {option}")
         print(Fore.YELLOW + "5. 📝 Custom")
+        print(Fore.MAGENTA + "-" * 50)
 
         user_choice = input(Fore.YELLOW + "Enter the number corresponding to your choice: ")
 
         if user_choice.lower() == 'quit':
-            print(Fore.MAGENTA + "Thanks for playing! 🎮")
+            print(Fore.MAGENTA + "Thanks for playing! See you next time! 🎮")
             break
 
         if user_choice == '5':
@@ -102,13 +111,17 @@ def main():
         context += f"\nYou: {user_input}\nGame:"
 
         # Get the response from OpenAI
+        print(Fore.CYAN + "Generating description...")
         response = get_openai_response(context)
 
         # Append the response to the context for further context
         context += f" {response}"
 
-        # Print the response for the user to see
-        print(Fore.GREEN + response)
+        print(Fore.MAGENTA + "-" * 50)
+        print(Fore.GREEN, end='')
+        print(response)
+        print(Fore.MAGENTA + "-" * 50)
+        input(Fore.CYAN + "Press Enter to continue...")
 
 
 if __name__ == "__main__":

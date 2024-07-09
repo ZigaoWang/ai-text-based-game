@@ -1,7 +1,5 @@
 # AI Text-Based Game
 
-![Logo](path_to_logo_image)
-
 Welcome to the AI Text-Based Game! This is a text-based adventure game powered by OpenAI's models. You can choose different themes and interact with the game world by typing your actions or selecting from generated options.
 
 ## Features

@@ -55,7 +55,7 @@ def select_theme():
 
 
 def generate_options(prompt):
-    options_prompt = f"Based on the following scenario, provide four different short actions the player can take: {prompt}"
+    options_prompt = f"Based on the following scenario, provide four different short actions the player can take: {prompt}. Make sure the 4 actions are short, 10 words max, and dont use numbers. Add emojis at the start."
     response = get_openai_response(options_prompt)
     options = response.split("\n")
     return [option.strip() for option in options if option.strip()]
@@ -74,6 +74,7 @@ def main():
     context = initial_prompt
 
     while True:
+        print("\nGenerating options...")
         # Generate options for the user
         options = generate_options(context)
 
